@@ -39,17 +39,16 @@ ESShape = function()
 
 //
 /// \brief Generates geometry for a sphere.  Allocates memory for the vertex data and stores
-///        the results in the arrays.  Generate index list for a TRIANGLE_STRIP
-/// \param numSlices The number of slices in the sphere
-/// \param vertices If not NULL, will contain array of float3 positions
-/// \param normals If not NULL, will contain array of float3 normals
-/// \param texCoords If not NULL, will contain array of float2 texCoords
-/// \param indices If not NULL, will contain the array of indices for the triangle strip
-/// \return The number of indices required for rendering the buffers (the number of indices stored in the indices array
-///         if it is not NULL ) as a GL_TRIANGLE_STRIP
+///        the results in the arrays.  Generate index list for a TRIANGLES
+/// \param vertices Boolean for whether to generate vertices
+/// \param normals Boolean for whether to generate normals
+/// \param texCoords Boolean for whether to generate texture coordinates
+/// \param indices Boolean for whether to generate an index buffer
+/// \return ESShape object containing the generated geometry
 //
 function esGenSphere( numSlices, radius, vertices, normals, texCoords, indices )
 {
+   var shape = new ESShape();
    var i;
    var j;
    var numParallels = numSlices;
@@ -58,17 +57,17 @@ function esGenSphere( numSlices, radius, vertices, normals, texCoords, indices )
    var angleStep = (2.0 * Math.PI) / numSlices;
 
    // Allocate memory for buffers
-   if ( vertices != null )
-       vertices = new Float32Array( 3 * numVertices );
+   if ( vertices  )
+       shape.vertices = new Float32Array( 3 * numVertices );
       
-   if ( normals != null )
-       normals = new Float32Array( 3 * numVertices );
+   if ( normals )
+       shape.normals = new Float32Array( 3 * numVertices );
 
-   if ( texCoords != null )
-      texCoords = new Float32Array( 2 * numVertices );
+   if ( texCoords )
+      shape.texCoords = new Float32Array( 2 * numVertices );
 
-   if ( indices != null )
-      indices = new Uint16Array( numIndices );
+   if ( indices )
+      shape.indices = new Uint16Array( numIndices );
 
    for ( i = 0; i < numParallels + 1; i++ )
    {
@@ -76,33 +75,33 @@ function esGenSphere( numSlices, radius, vertices, normals, texCoords, indices )
       {
          var vertex = ( i * (numSlices + 1) + j ) * 3;
 
-         if ( vertices != null )
+         if ( vertices )
          {
-            vertices[vertex + 0] = radius * Math.sin ( angleStep * i ) *
-                                            Math.sin ( angleStep * j );
-            vertices[vertex + 1] = radius * Math.cos ( angleStep * i );
-            vertices[vertex + 2] = radius * Math.sin ( angleStep * i ) *
-                                            Math.cos ( angleStep * j );
+            shape.vertices[vertex + 0] = radius * Math.sin ( angleStep * i ) *
+                                                  Math.sin ( angleStep * j );
+            shape.vertices[vertex + 1] = radius * Math.cos ( angleStep * i );
+            shape.vertices[vertex + 2] = radius * Math.sin ( angleStep * i ) *
+                                                  Math.cos ( angleStep * j );
          }
 
-         if ( normals != null)
+         if ( normals )
          {
-            normals[vertex + 0] = vertices[vertex + 0] / radius;
-            normals[vertex + 1] = vertices[vertex + 1] / radius;
-            normals[vertex + 2] = vertices[vertex + 2] / radius;
+            shape.normals[vertex + 0] = shape.vertices[vertex + 0] / radius;
+            shape.normals[vertex + 1] = shape.vertices[vertex + 1] / radius;
+            shape.normals[vertex + 2] = shape.vertices[vertex + 2] / radius;
          }
 
-         if ( texCoords != none)
+         if ( texCoords )
          {
             var texIndex = ( i * (numSlices + 1) + j ) * 2;
-            texCoords[texIndex + 0] =  j / numSlices;
-            texCoords[texIndex + 1] = ( 1.0 -  i ) / (numParallels - 1 );
+            shape.texCoords[texIndex + 0] =  j / numSlices;
+            shape.texCoords[texIndex + 1] = ( 1.0 -  i ) / (numParallels - 1 );
          }
       }
    }
 
    // Generate the indices
-   if ( indices != null )
+   if ( indices )
    {
       var curIdx = 0;
       
@@ -110,18 +109,18 @@ function esGenSphere( numSlices, radius, vertices, normals, texCoords, indices )
       {
          for ( j = 0; j < numSlices; j++ )
          {
-            indices[curIdx++]  = i * ( numSlices + 1 ) + j;
-            indices[curIdx++] = ( i + 1 ) * ( numSlices + 1 ) + j;
-            indices[curIdx++] = ( i + 1 ) * ( numSlices + 1 ) + ( j + 1 );
+            shape.indices[curIdx++]  = i * ( numSlices + 1 ) + j;
+            shape.indices[curIdx++] = ( i + 1 ) * ( numSlices + 1 ) + j;
+            shape.indices[curIdx++] = ( i + 1 ) * ( numSlices + 1 ) + ( j + 1 );
 
-            indices[curIdx++] = i * ( numSlices + 1 ) + j;
-            indices[curIdx++] = ( i + 1 ) * ( numSlices + 1 ) + ( j + 1 );
-            indices[curIdx++] = i * ( numSlices + 1 ) + ( j + 1 );
+            shape.indices[curIdx++] = i * ( numSlices + 1 ) + j;
+            shape.indices[curIdx++] = ( i + 1 ) * ( numSlices + 1 ) + ( j + 1 );
+            shape.indices[curIdx++] = i * ( numSlices + 1 ) + ( j + 1 );
          }
       }
    }
-
-   return numIndices;
+   shape.numIndices = numIndices;
+   return shape;
 }
 
 //
