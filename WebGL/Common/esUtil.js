@@ -92,11 +92,15 @@ function mainLoopCallback( esContext )
 //      Initialize ES utility context.  This must be called before calling any other
 //      functions.
 //
-function esInitContext ( esContext, canvas )
+function esInitContext ( esContext, canvas, contextAttributes )
 {
     try
     {
-        esContext.gl = canvas.getContext("experimental-webgl");
+        if ( contextAttributes == null)
+            esContext.gl = canvas.getContext("experimental-webgl");
+        else
+            esContext.gl = canvas.getContext("experimental-webgl",
+                                             contextAttributes );
         esContext.width = canvas.width;
         esContext.height = canvas.height;
     } catch(e) { }
