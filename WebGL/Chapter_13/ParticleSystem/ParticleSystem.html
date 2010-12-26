@@ -151,6 +151,7 @@ function Init ( esContext )
    userData.vertexObject = gl.createBuffer();
    gl.bindBuffer( gl.ARRAY_BUFFER, userData.vertexObject );
    gl.bufferData( gl.ARRAY_BUFFER, userData.particleData, gl.STATIC_DRAW );
+   userData.vertexBytesPerElement = userData.particleData.BYTES_PER_ELEMENT;
 
    // Initialize time to cause reset on first update
    userData.time = 1.0;
@@ -172,7 +173,7 @@ function Update ( esContext,  deltaTime )
 {
    var userData = esContext.userData;
 
-   userData.time += deltaTime * 0.001;
+   userData.time += deltaTime * 0.001125;
    console.log(userData.time);
 
    if ( userData.time >= 1.0 )
