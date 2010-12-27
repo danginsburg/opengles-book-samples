@@ -1,3 +1,18 @@
+//
+// Book:      OpenGL(R) ES 2.0 Programming Guide
+// Authors:   Aaftab Munshi, Dan Ginsburg, Dave Shreiner
+// ISBN-10:   0321502795
+// ISBN-13:   9780321502797
+// Publisher: Addison-Wesley Professional
+// URLs:      http://safari.informit.com/9780321563835
+//            http://www.opengles-book.com
+//
+
+// ESShapes
+//
+//    Utility cass for generating shapes
+//
+
 package com.openglesbook.common;
 
 import java.lang.Math;
@@ -7,7 +22,8 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 
-public class ESShapes {
+public class ESShapes 
+{
 
 	public int genSphere(int numSlices, float radius)
 	{
@@ -44,8 +60,7 @@ public class ESShapes {
 
 	            int texIndex = ( i * (numSlices + 1) + j ) * 2;
 	            mTexCoords.put(texIndex + 0,  (float) j / (float) numSlices);
-	            mTexCoords.put(texIndex + 1, ( 1.0f - (float) i ) / (float) (numParallels - 1 ));
-		        
+	            mTexCoords.put(texIndex + 1, ( 1.0f - (float) i ) / (float) (numParallels - 1 ));		       
 			}
 		}
 
@@ -69,6 +84,158 @@ public class ESShapes {
 		return numIndices;		
 	}
 	
+	public int genCube(float scale)
+	{
+		int i;
+		int numVertices = 24;
+		int numIndices = 36;
+			   
+		float[] cubeVerts =
+		   {
+		      -0.5f, -0.5f, -0.5f,
+		      -0.5f, -0.5f,  0.5f,
+		      0.5f, -0.5f,  0.5f,
+		      0.5f, -0.5f, -0.5f,
+		      -0.5f,  0.5f, -0.5f,
+		      -0.5f,  0.5f,  0.5f,
+		      0.5f,  0.5f,  0.5f,
+		      0.5f,  0.5f, -0.5f,
+		      -0.5f, -0.5f, -0.5f,
+		      -0.5f,  0.5f, -0.5f,
+		      0.5f,  0.5f, -0.5f,
+		      0.5f, -0.5f, -0.5f,
+		      -0.5f, -0.5f, 0.5f,
+		      -0.5f,  0.5f, 0.5f,
+		      0.5f,  0.5f, 0.5f, 
+		      0.5f, -0.5f, 0.5f,
+		      -0.5f, -0.5f, -0.5f,
+		      -0.5f, -0.5f,  0.5f,
+		      -0.5f,  0.5f,  0.5f,
+		      -0.5f,  0.5f, -0.5f,
+		      0.5f, -0.5f, -0.5f,
+		      0.5f, -0.5f,  0.5f,
+		      0.5f,  0.5f,  0.5f,
+		      0.5f,  0.5f, -0.5f,
+		   };
+
+		float[] cubeNormals =
+		   {
+		      0.0f, -1.0f, 0.0f,
+		      0.0f, -1.0f, 0.0f,
+		      0.0f, -1.0f, 0.0f,
+		      0.0f, -1.0f, 0.0f,
+		      0.0f, 1.0f, 0.0f,
+		      0.0f, 1.0f, 0.0f,
+		      0.0f, 1.0f, 0.0f,
+		      0.0f, 1.0f, 0.0f,
+		      0.0f, 0.0f, -1.0f,
+		      0.0f, 0.0f, -1.0f,
+		      0.0f, 0.0f, -1.0f,
+		      0.0f, 0.0f, -1.0f,
+		      0.0f, 0.0f, 1.0f,
+		      0.0f, 0.0f, 1.0f,
+		      0.0f, 0.0f, 1.0f,
+		      0.0f, 0.0f, 1.0f,
+		      -1.0f, 0.0f, 0.0f,
+		      -1.0f, 0.0f, 0.0f,
+		      -1.0f, 0.0f, 0.0f,
+		      -1.0f, 0.0f, 0.0f,
+		      1.0f, 0.0f, 0.0f,
+		      1.0f, 0.0f, 0.0f,
+		      1.0f, 0.0f, 0.0f,
+		      1.0f, 0.0f, 0.0f,
+		   };
+
+		float[] cubeTex =
+		   {
+		      0.0f, 0.0f,
+		      0.0f, 1.0f,
+		      1.0f, 1.0f,
+		      1.0f, 0.0f,
+		      1.0f, 0.0f,
+		      1.0f, 1.0f,
+		      0.0f, 1.0f,
+		      0.0f, 0.0f,
+		      0.0f, 0.0f,
+		      0.0f, 1.0f,
+		      1.0f, 1.0f,
+		      1.0f, 0.0f,
+		      0.0f, 0.0f,
+		      0.0f, 1.0f,
+		      1.0f, 1.0f,
+		      1.0f, 0.0f,
+		      0.0f, 0.0f,
+		      0.0f, 1.0f,
+		      1.0f, 1.0f,
+		      1.0f, 0.0f,
+		      0.0f, 0.0f,
+		      0.0f, 1.0f,
+		      1.0f, 1.0f,
+		      1.0f, 0.0f,
+		   };
+			   
+			  
+		// Allocate memory for buffers
+		mVertices = ByteBuffer.allocateDirect(numVertices * 3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+		mNormals = ByteBuffer.allocateDirect(numVertices * 3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+		mTexCoords = ByteBuffer.allocateDirect(numVertices * 2 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+		mIndices = ByteBuffer.allocateDirect(numIndices * 2).order(ByteOrder.nativeOrder()).asShortBuffer();
+
+		mVertices.put(cubeVerts).position(0);
+		for ( i = 0; i < numVertices; i++ )
+		{
+			mVertices.put(i, mVertices.get(i) * scale);      	
+		}
+
+		mNormals.put(cubeNormals).position(0);
+		mTexCoords.put(cubeTex).position(0);
+		
+		short[] cubeIndices =
+		  {
+		     0, 2, 1,
+		     0, 3, 2, 
+		     4, 5, 6,
+		     4, 6, 7,
+		     8, 9, 10,
+		     8, 10, 11, 
+		     12, 15, 14,
+		     12, 14, 13, 
+		     16, 17, 18,
+		     16, 18, 19, 
+		     20, 23, 22,
+		     20, 22, 21
+		  };
+
+		mIndices.put(cubeIndices).position(0);
+		mNumIndices = numIndices;
+	   	return numIndices;		
+	}
+	
+	public FloatBuffer getVertices()
+	{
+		return mVertices;
+	}
+	
+	public FloatBuffer getNormals()
+	{
+		return mNormals;
+	}
+	
+	public FloatBuffer getTexCoords()
+	{
+		return mTexCoords;
+	}
+	
+	public ShortBuffer getIndices()
+	{
+		return mIndices;
+	}
+	
+	public int getNumIndices()
+	{
+		return mNumIndices;
+	}
+			
 	// Member variables
 	private FloatBuffer mVertices;
 	private FloatBuffer mNormals;
