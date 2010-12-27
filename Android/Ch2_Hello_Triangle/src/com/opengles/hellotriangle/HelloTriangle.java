@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * This sample shows how to check for OpenGL ES 2.0 support at runtime, and then
- * use either OpenGL ES 1.0 or OpenGL ES 2.0, as appropriate.
- */
+ * Activity class for example program that detects OpenGL ES 2.0.
+ **/
 public class HelloTriangle extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) 
