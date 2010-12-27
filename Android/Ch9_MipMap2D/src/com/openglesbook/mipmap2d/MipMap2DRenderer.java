@@ -8,10 +8,10 @@
 //            http://www.opengles-book.com
 //
 
-// TextureWrap
+// MipMap2D
 //
-//    This is an example that demonstrates the three texture
-//    wrap modes available on 2D textures
+//    This is a simple example that demonstrates generating a mipmap chain
+//    and rendering with it
 //
 
 package com.openglesbook.mipmap2d;
