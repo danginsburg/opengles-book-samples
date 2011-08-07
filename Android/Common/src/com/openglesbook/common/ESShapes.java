@@ -130,7 +130,7 @@ public class ESShapes {
 				.order(ByteOrder.nativeOrder()).asShortBuffer();
 
 		mVertices.put(cubeVerts).position(0);
-		for (i = 0; i < numVertices; i++) {
+		for (i = 0; i < numVertices * 3; i++) {
 			mVertices.put(i, mVertices.get(i) * scale);
 		}
 

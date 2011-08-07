@@ -233,7 +233,7 @@ int ESUTIL_API esGenCube ( float scale, GLfloat **vertices, GLfloat **normals,
    {
       *vertices = malloc ( sizeof(GLfloat) * 3 * numVertices );
       memcpy( *vertices, cubeVerts, sizeof( cubeVerts ) );
-      for ( i = 0; i < numVertices; i++ )
+      for ( i = 0; i < numVertices * 3; i++ )
       {
          (*vertices)[i] *= scale;
       }
