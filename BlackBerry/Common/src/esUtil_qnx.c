@@ -43,6 +43,7 @@ struct
     screen_event_t screenEvent;
     int screenWindowSize[2];
     const char* glExtensions;
+    bool shouldExit;
 }__qnx;
 
 // Time global variables
@@ -125,6 +126,8 @@ static GLboolean qnxCreate(ESContext *esContext, GLuint flags)
         EGL_RENDER_BUFFER,  EGL_BACK_BUFFER,
         EGL_NONE
     };
+
+    __qnx.shouldExit = false;
 
     // Create the screen context
     rc = screen_create_context(&__qnx.screenContext, 0);
@@ -294,6 +297,7 @@ static void handleNavigatorEvent(bps_event_t *event)
 	case NAVIGATOR_SWIPE_DOWN:
 		break;
 	case NAVIGATOR_EXIT:
+		__qnx.shouldExit = true;
 		break;
 	}
 }
@@ -380,6 +384,7 @@ GLboolean CreateWindow(ESContext *esContext, const char *title, GLuint flags)
     qnxCreate(esContext, flags);
     bps_initialize();
     screen_request_events(__qnx.screenContext);
+    navigator_request_events(0);
 
     initTime();
 
@@ -400,6 +405,9 @@ void MainLoop(ESContext *esContext)
     for (;;)
     {
     	handle_events();
+    	if (__qnx.shouldExit)
+    		break;
+
         // Call update function if registered
         if (esContext->updateFunc != NULL)
             esContext->updateFunc(esContext, getElapsedTime() / 1000.0f);
