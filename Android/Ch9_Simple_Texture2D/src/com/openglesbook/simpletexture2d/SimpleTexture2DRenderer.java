@@ -59,10 +59,10 @@ public class SimpleTexture2DRenderer implements GLSurfaceView.Renderer
         // 2x2 Image, 3 bytes per pixel (R, G, B)
         byte[] pixels = 
             {  
-                127,   0,   0, // Red
-                0, 127,   0, // Green
-                0,   0, 127, // Blue
-                127, 127,   0  // Yellow
+                (byte) 0xff,   0,   0, // Red
+                0, (byte) 0xff,   0, // Green
+                0,   0, (byte) 0xff, // Blue
+                (byte) 0xff, (byte) 0xff,   0  // Yellow
             };
         ByteBuffer pixelBuffer = ByteBuffer.allocateDirect(4*3);
         pixelBuffer.put(pixels).position(0);
